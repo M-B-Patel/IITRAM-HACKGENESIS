@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Blood Link</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      background: #f8f8f8 url('Nan.jpeg') no-repeat center center/cover;
+      background-size: cover;
+    }
+
+    #logo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.5);
+      font-size: 3rem;
+      font-weight: bold;
+      color: #ff4d4d;
+      opacity: 0;
+      animation: welcome 2s ease-out forwards;
+    }
+
+    @keyframes welcome {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.5);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        top: 20px;
+        left: 50%;
+        transform: translate(-50%, 0) scale(0.8);
+      }
+    }
+
+    #bloodLinkText {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translate(-50%, 0);
+      font-size: 3rem;
+      font-weight: bolder;
+      color: #ff4d4d;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+    }
+
+    .auth-popup {
+      display: none;
+      position: fixed;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out forwards;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .auth-popup h2 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .auth-popup input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .auth-popup button {
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 10px 0;
+      border-radius: 5px;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    .auth-popup button:hover {
+      background-color: #ff3333;
+    }
+
+    .auth-popup .links {
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .auth-popup .links a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .auth-popup .links a:hover {
+      text-decoration: underline;
+    }
+
+    .close-popup {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5rem;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .success-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(240, 41, 41, 0.8);
+      padding: 30px;
+      border-radius: 10px;
+      color: white;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    @media (max-width: 768px) {
+      #logo {
+        font-size: 2rem;
+      }
+
+      #bloodLinkText {
+        font-size: 2rem;
+      }
+
+      .auth-popup h2 {
+        font-size: 1.5rem;
+      }
+      
+      .auth-popup button {
+        font-size: 1rem;
+      }
+
+      .auth-popup input {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="logo">Blood Link</div>
+  <div id="bloodLinkText">Blood Link</div>
+
+  <div class="auth-popup" id="authPopup">
+    <span class="close-popup" onclick="closePopup()">&times;</span>
+    <h2>Welcome to Blood Link</h2>
+    <form id="authForm">
+      <input type="text" id="username" placeholder="Username" aria-label="Enter your username" required>
+      <input type="password" id="password" placeholder="Password" aria-label="Enter your password" required>
+      <button type="submit" onclick="logIn(event)">Log In</button>
+      <button type="button" onclick="signUp()">Sign Up</button>
+      <div class="links">
+        <a href="#" onclick="forgotPassword()">Forgot Password?</a> | 
+        <a href="/terms">Terms & Conditions</a> | 
+        <a href="/privacy">Privacy Policy</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Success Popup for Sign Up -->
+  <div class="success-popup" id="successPopup">
+    <p>You have successfully signed up!</p>
+    <button onclick="continueToLogin()">Continue to Login</button>
+  </div>
+
+  <script>
+    document.getElementById('logo').addEventListener('animationend', () => {
+      document.getElementById('logo').style.display = 'none';
+      document.getElementById('bloodLinkText').style.opacity = 1;
+      document.getElementById('authPopup').style.display = 'block';
+    });
+
+    function signUp() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      if (username && password) {
+        // Display the success popup
+        document.getElementById('authPopup').style.display = 'none';
+        document.getElementById('successPopup').style.display = 'block';
+      } else {
+        alert('Please enter both username and password');
+      }
+    }
+
+    function logIn(event) {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      if (username && password) {
+        alert(Logged in with username: ${username});
+        window.location.href = '/dashboard';  // Modify with actual URL
+      } else {
+        alert('Please enter both username and password');
+      }
+    }
+
+    function forgotPassword() {
+      alert('Redirecting to password recovery');
+    }
+
+    function closePopup() {
+      document.getElementById('authPopup').style.display = 'none';
+    }
+
+    function continueToLogin() {
+      // Hide the success popup and show the login form again
+      document.getElementById('successPopup').style.display = 'none';
+      document.getElementById('authPopup').style.display = 'block';
+      // Clear the fields
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blood Donor Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    .slider-container {
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    }
+    .slider-container input[type='range'] {
+      vertical-align: middle;
+    }
+    #radiusValue {
+      margin-left: 10px;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+    .blood-group-input {
+      padding: 10px;
+      text-align: center;
+      background-color: #f0f0f0;
+    }
+    .blood-group-input label {
+      font-size: 18px;
+      margin-right: 10px;
+    }
+    .blood-group-input select {
+      padding: 5px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="blood-group-input">
+    <label for="bloodGroup">Enter your blood group:</label>
+    <select id="bloodGroup">
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+      <option value="O+">O+</option>
+      <option value="O-">O-</option>
+      <option value="AB+">AB+</option>
+      <option value="AB-">AB-</option>
+    </select>
+    <button onclick="filterDonors()">Show Donors</button>
+  </div>
+  
+  <div class="slider-container">
+    <label for="radiusSlider">Set proximity radius (meters):</label>
+    <input type="range" id="radiusSlider" min="100" max="10000" value="1000" step="100" oninput="updateRadius()">
+    <span id="radiusValue">1000</span>
+  </div>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Default location set to user's location or a fallback
+    let userLocation = { lat: 23.004260243318384, lng: 72.62173470301217 }; // Fallback location (Ahmedabad)
+    
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+        map.setView(userLocation, 12);
+        addProximityCircle(userLocation);
+      }, function() {
+        map.setView(userLocation, 12);
+        addProximityCircle(userLocation);
+      });
+    } else {
+      map.setView(userLocation, 12);
+      addProximityCircle(userLocation);
+    }
+
+    // Initialize map
+    const map = L.map('map').setView(userLocation, 12);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add a proximity circle
+    let proximityCircle;
+    function addProximityCircle(location) {
+      if (proximityCircle) {
+        map.removeLayer(proximityCircle);
+      }
+      const radius = document.getElementById('radiusSlider').value;
+      proximityCircle = L.circle([location.lat, location.lng], { radius: radius }).addTo(map);
+    }
+
+    // Update circle radius when slider is changed
+    function updateRadius() {
+      const radius = document.getElementById('radiusSlider').value;
+      document.getElementById('radiusValue').textContent = radius;
+      addProximityCircle(userLocation);
+      filterDonors();
+    }
+
+    // Blood group compatibility rules
+    const bloodGroupCompatibility = {
+      'A+': ['A+', 'A-', 'O+', 'O-'],
+      'A-': ['A-', 'O-'],
+      'B+': ['B+', 'B-', 'O+', 'O-'],
+      'B-': ['B-', 'O-'],
+      'O+': ['O+', 'O-'],
+      'O-': ['O-'],
+      'AB+': ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+      'AB-': ['A-', 'B-', 'AB-', 'O-']
+    };
+
+    const users = [
+  { id: 1, name: "Rahul Sharma", bloodGroup: "A+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 2, name: "Priya Patel", bloodGroup: "B+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 3, name: "Amit Shah", bloodGroup: "O+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 4, name: "Neha Gupta", bloodGroup: "AB+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 5, name: "Vijay Kumar", bloodGroup: "A-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 6, name: "Anjali Desai", bloodGroup: "B-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 7, name: "Rajesh Mehta", bloodGroup: "O-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 8, name: "Sneha Joshi", bloodGroup: "AB-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 9, name: "Sanjay Patel", bloodGroup: "A+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 10, name: "Pooja Shah", bloodGroup: "B+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 11, name: "Arun Singh", bloodGroup: "O+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 12, name: "Kavita Rao", bloodGroup: "AB+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 13, name: "Manoj Kumar", bloodGroup: "A-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 14, name: "Divya Patel", bloodGroup: "B-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 15, name: "Ravi Desai", bloodGroup: "O-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 16, name: "Sunita Mehta", bloodGroup: "AB-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 17, name: "Anil Sharma", bloodGroup: "A+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 18, name: "Kiran Patel", bloodGroup: "B+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 19, name: "Vivek Shah", bloodGroup: "O+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 20, name: "Rina Gupta", bloodGroup: "AB+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 21, name: "Suresh Kumar", bloodGroup: "A-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 22, name: "Meera Desai", bloodGroup: "B-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 23, name: "Ajay Mehta", bloodGroup: "O-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 24, name: "Nisha Joshi", bloodGroup: "AB-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 25, name: "Ramesh Patel", bloodGroup: "A+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 26, name: "Geeta Shah", bloodGroup: "B+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 27, name: "Dinesh Singh", bloodGroup: "O+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 28, name: "Anita Rao", bloodGroup: "AB+", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 29, name: "Prakash Kumar", bloodGroup: "A-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) },
+  { id: 30, name: "Shweta Patel", bloodGroup: "B-", lat: 22.910 + Math.random() * (23.122 - 22.910), lng: 72.460 + Math.random() * (72.700 - 72.460) }
+];
+
+    // Add markers for all users
+    let markers = [];   
+    users.forEach(user => {
+      const marker = L.marker([user.lat, user.lng])
+        .bindTooltip(`${user.name} (${user.bloodGroup})`, { permanent: false, direction: 'top' });
+      markers.push(marker);
+    });
+
+    // Function to filter donors based on blood group compatibility and proximity
+    function filterDonors() {
+      const selectedBloodGroup = document.getElementById('bloodGroup').value;
+      const compatibleGroups = bloodGroupCompatibility[selectedBloodGroup];
+      const radius = document.getElementById('radiusSlider').value;
+
+      // Clear existing markers
+      markers.forEach(marker => marker.removeFrom(map));
+
+      // Add markers for compatible donors within proximity
+      users.forEach(user => {
+        if (compatibleGroups.includes(user.bloodGroup)) {
+          const distance = map.distance(userLocation, [user.lat, user.lng]);
+          if (distance <= radius) {
+            markers[user.id - 1].addTo(map);
+          }
+        }
+      });
+    }
+
+    // Initially show all donors
+    filterDonors();
+  </script>
+</body>
+</html>

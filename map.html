@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blood Donor Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    .slider-container {
+        background: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    }
+    .slider-container input[type='range'] {
+        vertical-align: middle;
+    }
+    #radiusValue {
+        margin-left: 10px;
+        font-family: Arial, sans-serif;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+    .blood-group-input {
+      padding: 10px;
+      text-align: center;
+      background-color: #f0f0f0;
+    }
+    .blood-group-input label {
+      font-size: 18px;
+      margin-right: 10px;
+    }
+    .blood-group-input select {
+      padding: 5px;
+      font-size: 16px;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="blood-group-input">
+    <label for="bloodGroup">Enter your blood group:</label>
+    <select id="bloodGroup">
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+      <option value="O+">O+</option>
+      <option value="O-">O-</option>
+      <option value="AB+">AB+</option>
+      <option value="AB-">AB-</option>
+    </select>
+    <button onclick="filterDonors()">Show Donors</button>
+  </div>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Initialize the map centered around Ahmedabad
+    const map = L.map('map').setView([23.004260243318384, 72.62173470301217], 12);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Blood group compatibility rules
+    const bloodGroupCompatibility = {
+      'A+': ['A+', 'A-', 'O+', 'O-'],
+      'A-': ['A-', 'O-'],
+      'B+': ['B+', 'B-', 'O+', 'O-'],
+      'B-': ['B-', 'O-'],
+      'O+': ['O+', 'O-'],
+      'O-': ['O-'],
+      'AB+': ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+      'AB-': ['A-', 'B-', 'AB-', 'O-']
+    };
+
+    const users = [
+  { lat: 22.910, lng: 72.460, msg: "Rahul Sharma" },
+  { lat: 22.911, lng: 72.461, msg: "Priya Patel" },
+  { lat: 22.912, lng: 72.462, msg: "Amit Shah" },
+  { lat: 22.913, lng: 72.463, msg: "Neha Gupta" },
+  { lat: 22.914, lng: 72.464, msg: "Vijay Kumar" },
+  { lat: 22.915, lng: 72.465, msg: "Anjali Desai" },
+  { lat: 22.916, lng: 72.466, msg: "Rajesh Mehta" },
+  { lat: 22.917, lng: 72.467, msg: "Sneha Joshi" },
+  { lat: 22.918, lng: 72.468, msg: "Sanjay Patel" },
+  { lat: 22.919, lng: 72.469, msg: "Pooja Shah" },
+  { lat: 22.920, lng: 72.470, msg: "Arun Singh" },
+  { lat: 22.921, lng: 72.471, msg: "Kavita Rao" },
+  { lat: 22.922, lng: 72.472, msg: "Manoj Kumar" },
+  { lat: 22.923, lng: 72.473, msg: "Divya Patel" },
+  { lat: 22.924, lng: 72.474, msg: "Ravi Desai" },
+  { lat: 22.925, lng: 72.475, msg: "Sunita Mehta" },
+  { lat: 22.926, lng: 72.476, msg: "Anil Sharma" },
+  { lat: 22.927, lng: 72.477, msg: "Kiran Patel" },
+  { lat: 22.928, lng: 72.478, msg: "Vivek Shah" },
+  { lat: 22.929, lng: 72.479, msg: "Rina Gupta" },
+  { lat: 22.930, lng: 72.480, msg: "Suresh Kumar" },
+  { lat: 22.931, lng: 72.481, msg: "Meera Desai" },
+  { lat: 22.932, lng: 72.482, msg: "Ajay Mehta" },
+  { lat: 22.933, lng: 72.483, msg: "Nisha Joshi" },
+  { lat: 22.934, lng: 72.484, msg: "Ramesh Patel" },
+  { lat: 22.935, lng: 72.485, msg: "Geeta Shah" },
+  { lat: 22.936, lng: 72.486, msg: "Dinesh Singh" },
+  { lat: 22.937, lng: 72.487, msg: "Anita Rao" },
+  { lat: 22.938, lng: 72.488, msg: "Prakash Kumar" },
+  { lat: 22.939, lng: 72.489, msg: "Shweta Patel" }
+];
+
+
+
+    // Add markers for all users
+    let markers = [];   
+    users.forEach(user => {
+      const marker = L.marker([user.lat, user.lng])
+        .bindTooltip(`${user.name} (${user.bloodGroup})`, { permanent: false, direction: 'top' });
+      markers.push(marker);
+    });
+
+    // Function to filter donors based on blood group compatibility
+    function filterDonors() {
+      const selectedBloodGroup = document.getElementById('bloodGroup').value;
+      const compatibleGroups = bloodGroupCompatibility[selectedBloodGroup];
+
+      // Clear existing markers
+      markers.forEach(marker => marker.removeFrom(map));
+
+      // Add markers for compatible donors
+      users.forEach(user => {
+        if (compatibleGroups.includes(user.bloodGroup)) {
+          markers[user.id - 1].addTo(map);
+        }
+      });
+    }
+
+    // Initially show all donors
+    filterDonors();
+  </script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Link - Connecting Life</title>
+    <style>
+        :root {
+            --color1: #29353c;
+            --color2: #44576d;
+            --color3: #768a96;
+            --color4: #aac7d8;
+            --color5: #dfebf6;
+            --color6: #e6e6e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--color5);
+            animation: fadeIn 1s ease-in;
+        }
+
+        nav {
+            background: var(--color1);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            color: var(--color6);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .nav-buttons button {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            background: var(--color2);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-buttons button:hover {
+            transform: translateY(-2px);
+            background: var(--color3);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: var(--color2);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            top: 100%;
+            left: 0;
+            min-width: 180px;
+            z-index: 10;
+        }
+
+        .dropdown-content button {
+            display: block;
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 10px;
+            text-align: left;
+            color: white;
+            border-radius: 0;
+        }
+
+        .dropdown-content button:hover {
+            background: var(--color3);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--color1);
+        }
+
+        .quote {
+            font-size: 1.2rem;
+            margin: 2rem auto;
+            max-width: 600px;
+            font-style: italic;
+            color: var(--color2);
+        }
+
+        .main-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 600px;
+            margin: 3rem auto;
+        }
+
+        .main-btn {
+            padding: 1.5rem;
+            border: none;
+            border-radius: 15px;
+            background: var(--color2);
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .main-btn:hover {
+            background: var(--color1);
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .main-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Blood Link</div>
+        <div class="nav-buttons">
+            <button>About Us</button>
+            <button>Looking for Blood</button>
+            <div class="dropdown">
+                <button>Login</button>
+                <div class="dropdown-content">
+                    <button>Login as Donor</button>
+                    <button>Blood Bank Login</button>
+                    <button>Guest Login</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Every Drop Counts, Every Donor Matters</h1>
+        <p class="quote">"Your simple act of donation can write someone's life story. Be the hero in someone's chapter."</p>
+        
+        <div class="main-buttons">
+            <button class="main-btn"> Blood CheckAvailability</button>
+            <button class="main-btn">Blood Compatibility Chart</button>
+        </div>
+    </div>
+
+    <script>
+        // Add interactive elements here
+        document.querySelectorAll('.dropdown-content button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Feature coming soon!');
+            })<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blood Donor Home</title>
+  <style>
+    /* Your previous styles remain the same */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to the Blood Donation Platform</h1>
+    
+    <!-- Buttons for different sections -->
+    <div class="buttons">
+      <button id="bloodAvailabilityBtn">Blood Check Availability</button>
+      <button id="bloodCompatibilityBtn">Blood Compatibility Chart</button>
+      <button id="lookingForBloodBtn">Looking for Blood</button>
+    </div>
+  </div>
+
+  <script>
+    // Check if user is logged in and has a blood group saved
+    const userLoggedIn = localStorage.getItem('loggedIn') === 'true';
+    const userBloodGroup = localStorage.getItem('bloodGroup');
+
+    // Handle button clicks for the blood-related functionalities
+    document.getElementById('bloodAvailabilityBtn').addEventListener('click', () => {
+      if (!userLoggedIn) {
+        window.location.href = 'login.html'; // Redirect to login if not logged in
+      } else {
+        alert(`You are logged in as a ${userBloodGroup} donor.`);
+      }
+    });
+
+    document.getElementById('bloodCompatibilityBtn').addEventListener('click', () => {
+      if (!userLoggedIn) {
+        window.location.href = 'login.html'; // Redirect to login if not logged in
+      } else {
+        alert(`You are logged in as a ${userBloodGroup} donor.`);
+      }
+    });
+
+    document.getElementById('lookingForBloodBtn').addEventListener('click', () => {
+      if (!userLoggedIn) {
+        window.location.href = 'login.html'; // Redirect to login if not logged in
+      } else {
+        alert(`You are logged in as a ${userBloodGroup} donor.`);
+      }
+    });
+  </script>
+</body>
+</html>
+;
+        });
+    </script>
+</body>
+</html>
