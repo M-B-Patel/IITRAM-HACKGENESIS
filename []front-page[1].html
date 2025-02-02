@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Blood Link</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      background: #f8f8f8 url('Nan.jpeg') no-repeat center center/cover;
+      background-size: cover;
+      color: #333;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #ff4d4d;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .hero button {
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .hero button:hover {
+      background-color: #ff3333;
+    }
+
+    .info-section {
+      padding: 50px 20px;
+      text-align: center;
+      background-color: #fff;
+    }
+
+    .info-section h2 {
+      font-size: 2rem;
+      color: #ff4d4d;
+      margin-bottom: 20px;
+    }
+
+    .info-section p {
+      font-size: 1rem;
+      max-width: 800px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+
+    .info-section .features {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .info-section .feature {
+      flex: 1;
+      max-width: 300px;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f8f8f8;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-section .feature h3 {
+      font-size: 1.5rem;
+      color: #ff4d4d;
+      margin-bottom: 10px;
+    }
+
+    .info-section .feature p {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .info-section h2 {
+        font-size: 1.5rem;
+      }
+
+      .info-section .features {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .info-section .feature {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>Welcome to Blood Link</h1>
+    <p>Join us in saving lives by donating blood. Your contribution can make a difference. Sign up today and become a part of our life-saving community.</p>
+    <button onclick="window.location.href='[]front-page[2].html'">Get Started</button>
+  </div>
+
+  <div class="info-section">
+    <h2>Why Donate Blood?</h2>
+    <p>Blood donation is a simple, safe, and rewarding process. Here are some reasons why you should consider donating blood:</p>
+    <div class="features">
+      <div class="feature">
+        <h3>Save Lives</h3>
+        <p>Your donation can help save up to three lives. Every drop counts!</p>
+      </div>
+      <div class="feature">
+        <h3>Health Benefits</h3>
+        <p>Donating blood can help reduce the risk of heart disease and improve overall health.</p>
+      </div>
+      <div class="feature">
+        <h3>Community Impact</h3>
+        <p>Be a hero in your community by contributing to a vital cause.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Optional: Add any JavaScript functionality you need for the front page
+  </script>
+</body>
+</html>

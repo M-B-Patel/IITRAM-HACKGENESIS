@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Link - Connecting Lives</title>
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #FFE5D2;
+            color: #5A3E36;
+            line-height: 1.6;
+        }
+
+        /* Top Navigation Bar */
+        .top-bar {
+            background-color: #FF7C52;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .company-name {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #FFF;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: #FFF;
+            text-decoration: none;
+            font-size: 1.1em;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-box {
+            width: 8px;
+            height: 8px;
+            background-color: #FFF;
+            border-radius: 2px;
+            display: inline-block;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(to right, #E69580, #FFA780);
+            padding: 80px 40px;
+            text-align: center;
+            color: #FFF;
+        }
+
+        .quote {
+            font-size: 2.2em;
+            font-weight: 300;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.4;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .quote strong {
+            font-weight: 600;
+        }
+        /* Footer Section */
+        .footer {
+            background-color: #FF7C52;
+            color: #FFF;
+            text-align: center;
+            padding: 20px;
+            font-size: 1em;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ensure at least 2 per row */
+            gap: 30px;
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            transition: grid-template-columns 0.3s ease;
+        }
+
+        .feature-card {
+            background: #FFF;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            color: #FF7C52;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.5em;
+            color: #5A3E36;
+            margin-bottom: 15px;
+        }
+
+        .feature-description {
+            color: #7A5E56;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-link {
+                padding: 8px 15px;
+                font-size: 1em;
+            }
+
+            .quote {
+                font-size: 1.8em;
+            }
+
+            .features {
+                grid-template-columns: 1fr; /* One card per row on small screens */
+                padding: 40px 20px;
+            }
+        }
+
+        /* Elongate feature cards when the page is extended horizontally */
+        @media (min-width: 1024px) {
+            .features {
+                grid-template-columns: repeat(2, 1fr); /* Always two cards per row */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <div class="company-name">Blood Link</div>
+        <nav class="nav-links">
+            <a href="[]map3.html" class="nav-link">
+                <span class="nav-box"></span>
+                Find Donors
+            </a>
+            <a href="[]donor-login.html" class="nav-link">
+                <span class="nav-box"></span>
+                Register as Donor
+            </a>
+            <a href="[]avalability.html" class="nav-link">
+                <span class="nav-box"></span>
+                Check Availability
+            </a>
+            <a href="[]about.html" class="nav-link">
+                <span class="nav-box"></span>
+                About Us
+            </a>
+            <a href="[]rarity.html" class="nav-link">
+                <span class="nav-box"></span>
+                Blood Rarity
+            </a>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="quote">
+            "Every Drop Counts, Every Donor Matters.<br>
+            <strong>Your simple act of donation can write someone's life story.<br>
+            Be the hero in someone's chapter.</strong>"
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-card">
+            <div class="feature-icon">💉</div>
+            <h3 class="feature-title">Find Donors</h3>
+            <p class="feature-description">
+                Quickly locate nearby blood donors in emergency situations.
+                Our advanced search helps you find the right match.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3 class="feature-title">Register as Donor</h3>
+            <p class="feature-description">
+                Join our life-saving community. Register as a donor and
+                help save lives in your area.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <a href="[]gameeify.html" style="text-decoration: none; color: inherit;">
+                <div class="feature-icon">🎮</div>
+                <h3 class="feature-title">Check Your Rank</h3>
+                <p class="feature-description">
+                    Check your rank. Redeem 
+                    points for exciting rewards.
+                </p>
+            </a>
+        </div>
+        
+
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title">Blood Rarity</h3>
+            <p class="feature-description">
+                Discover how rare your blood type is and understand
+                its importance in the donation ecosystem.
+            </p>
+        </div>
+    </section>
+    <!-- Footer Section -->
+    <div class="footer">
+        &copy; 2025 Blood Link - All Rights Reserved.
+    </div>
+</body>
+</html>

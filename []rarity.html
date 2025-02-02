@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Type Information</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+            background-size: 300% 300%;
+            animation: gradientBG 8s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #e74c3c;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        select:focus {
+            border-color: #e74c3c;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #3498db;
+        }
+        .result p {
+            margin: 10px 0;
+        }
+        .population-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        .population-bar-fill {
+            height: 100%;
+            background-color: #e74c3c;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .special-label {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Blood Type Information</h1>
+    <label for="bloodType">Select Your Blood Type:</label>
+    <select id="bloodType">
+        <option value="" disabled selected>Select your blood type</option>
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+    </select>
+
+    <div class="result" id="result">
+        <!-- Result will be displayed here -->
+    </div>
+</div>
+
+<script>
+    const bloodTypeData = {
+        "A+": { population: "30%", donateTo: ["A+", "AB+"], receiveFrom: ["A+", "A-", "O+", "O-"] },
+        "A-": { population: "6%", donateTo: ["A+", "A-", "AB+", "AB-"], receiveFrom: ["A-", "O-"] },
+        "B+": { population: "20%", donateTo: ["B+", "AB+"], receiveFrom: ["B+", "B-", "O+", "O-"] },
+        "B-": { population: "2%", donateTo: ["B+", "B-", "AB+", "AB-"], receiveFrom: ["B-", "O-"] },
+        "AB+": { population: "5%", donateTo: ["AB+"], receiveFrom: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], label: "Universal Recipient" },
+        "AB-": { population: "1%", donateTo: ["AB+", "AB-"], receiveFrom: ["A-", "B-", "AB-", "O-"] },
+        "O+": { population: "37%", donateTo: ["A+", "B+", "AB+", "O+"], receiveFrom: ["O+", "O-"] },
+        "O-": { population: "9%", donateTo: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], receiveFrom: ["O-"], label: "Universal Donor" }
+    };
+
+    const bloodTypeSelect = document.getElementById('bloodType');
+    const resultDiv = document.getElementById('result');
+
+    bloodTypeSelect.addEventListener('change', (event) => {
+        const selectedBloodType = event.target.value;
+        if (!selectedBloodType) {
+            resultDiv.innerHTML = ""; // Clear the result if no blood type is selected
+            return;
+        }
+
+        const data = bloodTypeData[selectedBloodType];
+
+        const donateTo = data.donateTo.join(', ');
+        const receiveFrom = data.receiveFrom.join(', ');
+        const population = parseFloat(data.population);
+
+        const specialLabel = data.label
+            ? `<p class="special-label">${data.label}</p>`
+            : "";
+
+        resultDiv.innerHTML = `
+            <p><strong>Population with ${selectedBloodType}:</strong> ${data.population}</p>
+            <p><strong>You can donate to:</strong> ${donateTo}</p>
+            <p><strong>You can receive from:</strong> ${receiveFrom}</p>
+            ${specialLabel}
+            <div class="population-bar">
+                <div class="population-bar-fill" style="width: ${population}%;"></div>
+            </div>
+        `;
+    });
+</script>
+
+</body>
+</html>
